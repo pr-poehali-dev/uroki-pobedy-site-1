@@ -38,6 +38,7 @@ const Header = () => {
         </div>
         <nav className="hidden md:flex items-center gap-6">
           <Link to="/" className="hover:underline">Главная</Link>
+          <Link to="/gallery" className="hover:underline">Галерея</Link>
           <Link to="/lessons" className="hover:underline">Уроки</Link>
           <Link to="/materials" className="hover:underline">Материалы</Link>
           <Link to="/about" className="hover:underline">О проекте</Link>
