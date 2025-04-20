@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import OnlineStatus from "@/components/OnlineStatus";
 import Gallery from "@/components/Gallery";
 import { WifiOff } from "lucide-react";
+import HolidayBanner from "@/components/HolidayBanner";
 
 const GalleryPage = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -26,6 +27,10 @@ const GalleryPage = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="mb-6">
+          <HolidayBanner />
+        </div>
+        
         <h1 className="text-3xl font-bold mb-6">Архивные материалы</h1>
         
         {isOnline ? (

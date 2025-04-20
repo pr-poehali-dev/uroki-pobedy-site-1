@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Maximize2, FileText, Mail } from "lucide-react";
+import { Maximize2, FileText, Mail, Camera } from "lucide-react";
 
 type ImageCategory = "frontline" | "documents" | "letters";
 
@@ -82,7 +82,7 @@ const images: GalleryImage[] = [
   {
     id: 8,
     src: "/placeholder.svg",
-    alt: "Письмо с благодарностью",
+    alt: "Благодарственное письмо",
     title: "Благодарственное письмо",
     description: "Письмо с благодарностью от командования родителям героя.",
     category: "letters",
@@ -97,6 +97,39 @@ const images: GalleryImage[] = [
   },
 ];
 
+const ImageHandler = ({ image }: { image: GalleryImage }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div className="relative w-full h-64">
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted">
+          <div className="animate-pulse h-8 w-8 rounded-full bg-muted-foreground/30"></div>
+        </div>
+      )}
+      
+      {hasError && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted">
+          <Camera className="h-12 w-12 text-muted-foreground mb-2" />
+          <p className="text-sm text-muted-foreground">Ошибка загрузки</p>
+        </div>
+      )}
+      
+      <img
+        src={image.src}
+        alt={image.alt}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded && !hasError ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          setHasError(true);
+          setIsLoaded(true);
+        }}
+      />
+    </div>
+  );
+};
+
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
@@ -105,6 +138,7 @@ const Gallery = () => {
       <Tabs defaultValue="frontline" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="frontline" className="flex items-center gap-2">
+            <Camera className="h-4 w-4" />
             <span className="hidden sm:inline">Фотографии</span> с фронтов
           </TabsTrigger>
           <TabsTrigger value="documents" className="flex items-center gap-2">
@@ -121,15 +155,11 @@ const Gallery = () => {
           <TabsContent key={category} value={category} className="mt-0">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {images
-                .filter((img) => img.category === category)
+                .filter((img) => img.category === category as ImageCategory)
                 .map((image) => (
                   <Card key={image.id} className="overflow-hidden">
                     <CardContent className="p-0 relative group">
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        className="w-full h-64 object-cover"
-                      />
+                      <ImageHandler image={image} />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                         <h3 className="font-bold">{image.title}</h3>
                         <p className="text-sm line-clamp-2">{image.description}</p>
@@ -148,11 +178,9 @@ const Gallery = () => {
                           <DialogContent className="max-w-4xl">
                             {selectedImage && (
                               <div className="space-y-4">
-                                <img
-                                  src={selectedImage.src}
-                                  alt={selectedImage.alt}
-                                  className="w-full max-h-[70vh] object-contain"
-                                />
+                                <div className="relative w-full max-h-[70vh]">
+                                  <ImageHandler image={selectedImage} />
+                                </div>
                                 <div>
                                   <h2 className="text-xl font-bold">{selectedImage.title}</h2>
                                   <p className="text-muted-foreground">{selectedImage.description}</p>

@@ -4,6 +4,9 @@ import Hero from "@/components/Hero";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import OnlineStatus from "@/components/OnlineStatus";
+import HolidayBanner from "@/components/HolidayBanner";
+import MusicPlayer from "@/components/MusicPlayer";
+import ProjectInfo from "@/components/ProjectInfo";
 
 const HomePage = () => {
   return (
@@ -11,7 +14,18 @@ const HomePage = () => {
       <Header />
       <main className="flex-grow">
         <Hero />
-        <Features />
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3">
+              <Features />
+              <ProjectInfo />
+            </div>
+            <div className="space-y-6">
+              <HolidayBanner />
+              <MusicPlayer />
+            </div>
+          </div>
+        </div>
       </main>
       <Footer />
       <OnlineStatus />
